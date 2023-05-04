@@ -10,6 +10,9 @@ screen = pygame.display.set_mode((screen_width,screen_height))
 # 화면 타이틀 설정
 pygame.display.set_caption("Nado Game") #게임 이름
 
+# FPS
+clock = pygame.time.Clock()
+
 # 배경 이미지 블러오기
 background = pygame.image.load("C:/Users/ilheu/Desktop/pythonworkplace/pygame_basic/background.png")
 
@@ -25,22 +28,28 @@ character_y_pos = screen_height - character_height # 화면 의 가장 아래
 to_x = 0
 to_y = 0
 
+# 캐릭터 이동 속도
+character_speed = 0.6
+
 # 이벤트 루프
 running = True  # 게임이 진행 중인가?
 while running:
+    dt = clock.tick(60) # 게임화면 의 초당 프레임수
+
+
     for event in pygame.event.get(): # 어떤 이벤트가 발생?
         if event.type == pygame.QUIT: # 창이 닫히는 이벤트 발행?
             running = False #게임이 진행 중이 아님
 
         if event.type == pygame.KEYDOWN: # 키가 눌렸는지 확이
             if event.key ==  pygame.K_LEFT: # 캐릭터를 왼쪽으로 
-                to_x -= 5
+                to_x -= character_speed
             elif event.key ==  pygame.K_RIGHT: # 캐릭터를 오른쪽으로 
-                to_x += 5
+                to_x += character_speed
             elif event.key ==  pygame.K_UP: # 캐릭터를 위로
-                to_y -= 5
+                to_y -= character_speed
             elif event.key ==  pygame.K_DOWN: # 캐릭터를 아래로 
-                to_y += 5
+                to_y += character_speed
 
         if event.type == pygame.KEYUP: # 방향키 떼면 멈춤
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -48,8 +57,8 @@ while running:
             elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                 to_y = 0
 
-    character_x_pos += to_x
-    character_y_pos += to_y
+    character_x_pos += to_x * dt
+    character_y_pos += to_y * dt
 
     #가로 경계값
 

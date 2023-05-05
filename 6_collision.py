@@ -31,6 +31,18 @@ to_y = 0
 # 캐릭터 이동 속도
 character_speed = 0.6
 
+# 적군 불러오기
+enemy = pygame.image.load("enemy.png")
+enemy_size =  enemy.get_rect().size # 이미지의 크기를 구해옴
+enemy_width = enemy_size[0] #캐릭터 가로크기
+enemy_height = enemy_size[1] #캐릭터 세로크기
+enemy_x_pos = (screen_width / 2) - (enemy_width / 2) # 화면 중앙
+enemy_y_pos = (screen_height / 2) - (enemy_height / 2) # 화면 중앙
+
+
+
+
+
 # 이벤트 루프
 running = True  # 게임이 진행 중인가?
 while running:
@@ -73,9 +85,25 @@ while running:
     elif character_y_pos > screen_height - character_height:
         character_y_pos = screen_height - character_height
 
-    screen.blit(background,(0,0)) #배경 그리기
+    # 충돌처리 룰 위한 rect 업데이트
+    character_rect = character.get_rect()
+    character_rect.left = character_x_pos
+    character_rect.top = character_y_pos
 
+    enemy_rect = enemy.get_rect()
+    enemy_rect.left = enemy_x_pos
+    enemy_rect.top = enemy_y_pos
+
+    # 충돌체크
+    if character_rect.colliderect(enemy_rect):
+        print("충돌했어요")
+        running = False
+
+
+
+    screen.blit(background,(0,0)) #배경 그리기
     screen.blit(character,(character_x_pos,character_y_pos)) # 캐릭터 그리기
+    screen.blit(enemy,(enemy_x_pos , enemy_y_pos)) # 적 그리기
 
     pygame.display.update()  # 게임화면 다시 그리기!!!
 
